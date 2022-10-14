@@ -9,7 +9,7 @@ type HeaderProps = {
 const Header = ({ children }: HeaderProps) => {
     return (
         <div>
-            <header className="absolute top-0 left-0 z-10 flex h-16 w-full items-center justify-around bg-white text-black">
+            <header className="absolute top-0 left-0 z-10 flex h-16 w-full items-center justify-around bg-white text-neutral-900">
                 <Link href="/">
                     <h1 className="cursor-pointer text-2xl font-bold">
                         T3 Demo

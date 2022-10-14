@@ -15,7 +15,7 @@ const Index: NextPage = () => {
         )
 
     return (
-        <main className="container my-32 flex justify-center">
+        <main className="container mx-auto my-32 flex justify-center">
             <ul className="grid w-2/3 grid-cols-3 gap-10">
                 {houses?.map((house) => (
                     <HouseInstance

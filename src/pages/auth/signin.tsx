@@ -20,7 +20,7 @@ type SigninProps = {
 
 const Signin = ({ csrfToken, providers }: SigninProps) => {
     return (
-        <div className="container my-32 flex flex-col items-center gap-4">
+        <div className="container mx-auto my-32 flex flex-col items-center gap-4">
             <div>
                 <p className="text-red-600">
                     Email Auth is not set up yet, use Github instead
@@ -38,7 +38,7 @@ const Signin = ({ csrfToken, providers }: SigninProps) => {
                     defaultValue={csrfToken}
                 />
                 <input
-                    className="h-10 w-64 rounded px-3 text-center text-neutral-900 outline-0"
+                    className={styles.input}
                     placeholder="Your email address"
                 />
                 <button className={`${styles.btn}`}>Sign in with Email</button>

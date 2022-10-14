@@ -9,7 +9,7 @@ export const authOptions: NextAuthOptions = {
     pages: {
         // todo
         // signIn: "/auth/signin",
-        // verifyRequest: "/auth/verify",
+        verifyRequest: "/auth/verify",
         // newUser: "/auth/signup",
     },
     // Include user.id on session
