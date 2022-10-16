@@ -1,20 +1,19 @@
-import type { NextPage } from "next"
-import { AiOutlineLoading3Quarters } from "react-icons/ai"
-import { trpc } from "../../utils/trpc"
+import type { GetStaticProps, NextPage } from "next"
+import { prisma } from "../../server/db/client"
 import HouseInstance from "../../components/HousesPage/HouseInstance"
-import styles from "../../styles"
+import { House } from "../../types"
 
-const Index: NextPage = () => {
-    const { data: houses, isLoading } = trpc.houses.getAll.useQuery()
+const HousesPage: NextPage<{ data: House[] }> = ({ data: houses }) => {
+    // const { data: houses, isLoading } = trpc.houses.getAll.useQuery()
 
-    if (isLoading)
-        return (
-            <div className={`${styles.loader} my-32`}>
-                <AiOutlineLoading3Quarters
-                    className={`${styles.loaderLine} text-white`}
-                />
-            </div>
-        )
+    // if (isLoading)
+    //     return (
+    //         <div className={`${styles.loader} my-32`}>
+    //             <AiOutlineLoading3Quarters
+    //                 className={`${styles.loaderLine} text-white`}
+    //             />
+    //         </div>
+    //     )
 
     return (
         <main className="container mx-auto my-32 flex justify-center">
@@ -34,4 +33,24 @@ const Index: NextPage = () => {
     )
 }
 
-export default Index
+export const getStaticProps: GetStaticProps = async () => {
+    const DAY_IN_SECONDS = 60 * 60 * 24
+    const data = await prisma.houses.findMany({
+        select: {
+            id: true,
+            address: true,
+            area: true,
+            price: true,
+            photo: true,
+        },
+    })
+
+    return {
+        props: {
+            data,
+        },
+        revalidate: DAY_IN_SECONDS,
+    }
+}
+
+export default HousesPage

@@ -5,3 +5,11 @@ export interface UserTour {
     scheduledFor: Date
     houseId: string
 }
+
+export interface House {
+    id: string
+    address: string
+    area: string
+    price: string
+    photo: string
+}
