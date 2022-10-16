@@ -9,7 +9,7 @@ import { AiOutlineLoading3Quarters } from "react-icons/ai"
 import { trpc } from "../../utils/trpc"
 import formatPrice from "../../utils/formatPrice"
 import styles from "../../styles"
-import RequestForm from "../../components/RequestForm"
+import RequestForm from "../../components/ExactHousePage/RequestForm"
 
 const HousePage: NextPage = () => {
     const formRef = useRef<HTMLFormElement>(null)
@@ -46,7 +46,9 @@ const HousePage: NextPage = () => {
     if (isLoadingAll || isLoadingInfo || isLoadingTours)
         return (
             <div className={`${styles.loader} my-32`}>
-                <AiOutlineLoading3Quarters className={styles.loaderLine} />
+                <AiOutlineLoading3Quarters
+                    className={`${styles.loaderLine} text-white`}
+                />
             </div>
         )
 

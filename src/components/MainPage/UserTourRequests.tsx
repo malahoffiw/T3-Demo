@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
-import styles from "../styles"
-import { UserTour } from "../types"
-import { trpc } from "../utils/trpc"
+import styles from "../../styles"
+import { UserTour } from "../../types"
+import { trpc } from "../../utils/trpc"
 
 const UserTourRequests = () => {
     const [userTours, setUserTours] = useState<UserTour[]>([])

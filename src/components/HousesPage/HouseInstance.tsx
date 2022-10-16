@@ -1,6 +1,6 @@
 import Image from "next/image"
 import Link from "next/link"
-import formatPrice from "../utils/formatPrice"
+import formatPrice from "../../utils/formatPrice"
 
 type HouseInstanceProps = {
     id: string

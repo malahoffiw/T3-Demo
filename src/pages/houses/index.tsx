@@ -1,7 +1,7 @@
 import type { NextPage } from "next"
 import { AiOutlineLoading3Quarters } from "react-icons/ai"
 import { trpc } from "../../utils/trpc"
-import HouseInstance from "../../components/HouseInstance"
+import HouseInstance from "../../components/HousesPage/HouseInstance"
 import styles from "../../styles"
 
 const Index: NextPage = () => {
@@ -10,7 +10,9 @@ const Index: NextPage = () => {
     if (isLoading)
         return (
             <div className={`${styles.loader} my-32`}>
-                <AiOutlineLoading3Quarters className={styles.loaderLine} />
+                <AiOutlineLoading3Quarters
+                    className={`${styles.loaderLine} text-white`}
+                />
             </div>
         )
 

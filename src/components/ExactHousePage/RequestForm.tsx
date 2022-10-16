@@ -1,7 +1,7 @@
 import { useRef, useState } from "react"
 import { ISODateString } from "next-auth"
 import { useRouter } from "next/router"
-import styles from "../styles"
+import styles from "../../styles"
 
 type RequestFormProps = {
     createRequest: (userPhone: string, scheduledFor: ISODateString) => void
