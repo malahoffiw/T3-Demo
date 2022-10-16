@@ -13,3 +13,8 @@ export interface House {
     price: string
     photo: string
 }
+
+export interface Owner {
+    owner: string
+    phone: string
+}

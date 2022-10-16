@@ -1,37 +1,34 @@
 import { useRef } from "react"
-import type { NextPage } from "next"
+import type { GetStaticPropsContext, NextPage } from "next"
 import { ISODateString } from "next-auth"
 import { signIn, useSession } from "next-auth/react"
 import Link from "next/link"
 import Image from "next/image"
-import { useRouter } from "next/router"
-import { AiOutlineLoading3Quarters } from "react-icons/ai"
 import { trpc } from "../../utils/trpc"
+import { prisma } from "../../server/db/client"
 import formatPrice from "../../utils/formatPrice"
 import styles from "../../styles"
+import { House, Owner } from "../../types"
 import RequestForm from "../../components/ExactHousePage/RequestForm"
+import HouseToursRequested from "../../components/ExactHousePage/HouseToursRequested"
 
-const HousePage: NextPage = () => {
-    const formRef = useRef<HTMLFormElement>(null)
-    const { data: session } = useSession()
+type HousePageProps = {
+    house: House
+    owner: Owner
+}
+
+const HousePage: NextPage<HousePageProps> = ({ house, owner }) => {
     const tourRequest = trpc.tourRequests.createTourRequest.useMutation()
-
-    const router = useRouter()
-    const id = router.query.id as string
-    const { data: house, isLoading: isLoadingAll } =
-        trpc.houses.getExact.useQuery(id || "")
-    const { data: owner, isLoading: isLoadingInfo } =
-        trpc.houses.getOwnerInfo.useQuery(id || "")
-    const { data: tours, isLoading: isLoadingTours } =
-        trpc.tourRequests.getHouseTourRequests.useQuery(id || "")
-
     const createRequest = (userPhone: string, scheduledFor: ISODateString) => {
         tourRequest.mutate({
             userPhone,
             scheduledFor: new Date(scheduledFor),
-            houseId: id,
+            houseId: house.id,
         })
     }
+
+    const formRef = useRef<HTMLFormElement>(null)
+    const { data: session } = useSession()
 
     const openForm = () => {
         if (session) {
@@ -41,23 +38,6 @@ const HousePage: NextPage = () => {
 
     const closeForm = () => {
         formRef.current && formRef.current.classList.add("hidden")
-    }
-
-    if (isLoadingAll || isLoadingInfo || isLoadingTours)
-        return (
-            <div className={`${styles.loader} my-32`}>
-                <AiOutlineLoading3Quarters
-                    className={`${styles.loaderLine} text-white`}
-                />
-            </div>
-        )
-
-    if (!house || !owner) {
-        return (
-            <p className="my-32 text-center text-xl font-bold">
-                Error: ! No data fetched !
-            </p>
-        )
     }
 
     return (
@@ -93,14 +73,7 @@ const HousePage: NextPage = () => {
                 <button className={`${styles.btn} mt-10`} onClick={openForm}>
                     Request a tour
                 </button>
-                {tours && tours.length > 0 ? (
-                    <p className="mt-4 border-t pt-2">
-                        Tours requested for this house:{" "}
-                        <b className="text-lg">{tours.length}</b>
-                    </p>
-                ) : (
-                    <p>No tours requested</p>
-                )}
+                <HouseToursRequested id={house.id} />
             </section>
             <section
                 ref={formRef}
@@ -111,6 +84,52 @@ const HousePage: NextPage = () => {
             </section>
         </main>
     )
+}
+
+export const getStaticPaths = async () => {
+    const houses = await prisma.houses.findMany({ select: { id: true } })
+
+    const paths = houses.map((house) => ({
+        params: { id: house.id },
+    }))
+
+    return { paths, fallback: false }
+}
+
+export const getStaticProps = async ({
+    params,
+}: GetStaticPropsContext<{ id: string }>) => {
+    const DAY_IN_SECONDS = 60 * 60 * 24
+    const houseId = params?.id
+    const house = await prisma.houses.findUnique({
+        where: {
+            id: houseId,
+        },
+        select: {
+            id: true,
+            address: true,
+            area: true,
+            price: true,
+            photo: true,
+        },
+    })
+    const owner = await prisma.houses.findUnique({
+        where: {
+            id: houseId,
+        },
+        select: {
+            owner: true,
+            phone: true,
+        },
+    })
+
+    return {
+        props: {
+            house,
+            owner,
+        },
+        revalidate: DAY_IN_SECONDS,
+    }
 }
 
 export default HousePage
