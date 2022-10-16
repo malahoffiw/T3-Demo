@@ -1,6 +1,7 @@
 import { useRef } from "react"
 import type { NextPage } from "next"
 import { ISODateString } from "next-auth"
+import { signIn, useSession } from "next-auth/react"
 import Link from "next/link"
 import Image from "next/image"
 import { useRouter } from "next/router"
@@ -11,16 +12,18 @@ import styles from "../../styles"
 import RequestForm from "../../components/RequestForm"
 
 const HousePage: NextPage = () => {
-    const router = useRouter()
     const formRef = useRef<HTMLFormElement>(null)
+    const { data: session } = useSession()
     const tourRequest = trpc.tourRequests.createTourRequest.useMutation()
+
+    const router = useRouter()
     const id = router.query.id as string
     const { data: house, isLoading: isLoadingAll } =
-        trpc.houses.getExact.useQuery(id)
+        trpc.houses.getExact.useQuery(id || "")
     const { data: owner, isLoading: isLoadingInfo } =
-        trpc.houses.getOwnerInfo.useQuery(id)
+        trpc.houses.getOwnerInfo.useQuery(id || "")
     const { data: tours, isLoading: isLoadingTours } =
-        trpc.tourRequests.getHouseTourRequests.useQuery(id)
+        trpc.tourRequests.getHouseTourRequests.useQuery(id || "")
 
     const createRequest = (userPhone: string, scheduledFor: ISODateString) => {
         tourRequest.mutate({
@@ -31,8 +34,11 @@ const HousePage: NextPage = () => {
     }
 
     const openForm = () => {
-        formRef.current && formRef.current.classList.remove("hidden")
+        if (session) {
+            formRef.current && formRef.current.classList.remove("hidden")
+        } else signIn()
     }
+
     const closeForm = () => {
         formRef.current && formRef.current.classList.add("hidden")
     }
@@ -63,7 +69,7 @@ const HousePage: NextPage = () => {
                     alt="house"
                     width={550}
                     height={350}
-                    className="cursor-pointer rounded object-cover"
+                    className="rounded object-cover"
                 />
             </section>
             <section className="flex min-h-full flex-col justify-center gap-2">
