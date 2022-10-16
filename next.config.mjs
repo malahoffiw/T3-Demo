@@ -22,6 +22,6 @@ export default defineNextConfig({
         defaultLocale: "en",
     },
     images: {
-        domains: ['images.unsplash.com', 'avatars.githubusercontent.com'],
+        domains: ['avatars.githubusercontent.com'],
     }
 })
