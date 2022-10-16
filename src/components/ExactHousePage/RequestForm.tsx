@@ -1,4 +1,4 @@
-import { useRef, useState } from "react"
+import { ChangeEvent, useRef, useState } from "react"
 import { ISODateString } from "next-auth"
 import { useRouter } from "next/router"
 import styles from "../../styles"
@@ -13,6 +13,17 @@ const RequestForm = ({ createRequest }: RequestFormProps) => {
         useState<ISODateString>("2022-11-01T09:00")
     const router = useRouter()
     const btnRef = useRef<HTMLButtonElement>(null)
+
+    const handlePhoneInput = (e: ChangeEvent<HTMLInputElement>) => {
+        const text = e.target.value
+
+        if (text.length === 3 || text.length === 7) {
+            if (text.length > phone.length) setPhone(`${text}-`)
+            else setPhone((prevState) => prevState.slice(0, -2))
+        } else {
+            setPhone(text)
+        }
+    }
 
     return (
         <div
@@ -37,9 +48,10 @@ const RequestForm = ({ createRequest }: RequestFormProps) => {
                     type="tel"
                     id="phone"
                     value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
+                    onChange={handlePhoneInput}
                     placeholder="012-345-6789"
                     pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+                    maxLength={12}
                     required
                 />
                 <label htmlFor="date">Schedule tour for</label>
