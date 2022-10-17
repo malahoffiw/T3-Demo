@@ -14,7 +14,9 @@ const UserTourRequests = () => {
     }, [tours])
 
     return (
-        <section className={`h-52 w-64 ${styles.blockWhite}`}>
+        <section
+            className={`h-52 w-64 ${styles.blockWhite} col-span-2 sm:w-full`}
+        >
             <p>You requested {userTours.length} tours</p>
         </section>
     )

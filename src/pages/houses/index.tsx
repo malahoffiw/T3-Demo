@@ -5,7 +5,7 @@ import { House } from "../../types"
 
 const HousesPage: NextPage<{ data: House[] }> = ({ data: houses }) => (
     <main className="container mx-auto my-32 flex justify-center">
-        <ul className="grid w-2/3 grid-cols-3 gap-10">
+        <ul className="flex w-3/4 flex-col gap-10 md:grid md:grid-cols-2 xl:grid-cols-3">
             {houses?.map((house) => (
                 <HouseInstance
                     key={house.id}

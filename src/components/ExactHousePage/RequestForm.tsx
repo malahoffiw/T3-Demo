@@ -28,9 +28,11 @@ const RequestForm = ({ createRequest }: RequestFormProps) => {
     return (
         <div
             onClick={(e) => e.stopPropagation()}
-            className="mx-auto w-96 items-center rounded bg-white py-14 text-center text-neutral-900"
+            className="mx-auto w-64 items-center rounded bg-white py-14 text-center text-neutral-900 sm:w-96"
         >
-            <h1 className="mb-8 text-3xl font-bold">Request a tour</h1>
+            <h1 className="mb-8 text-2xl font-bold sm:text-3xl">
+                Request a tour
+            </h1>
             <form
                 className="flex flex-col items-center gap-3"
                 onSubmit={(event) => {

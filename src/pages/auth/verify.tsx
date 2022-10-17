@@ -3,7 +3,7 @@ import Link from "next/link"
 
 const Verify = () => {
     return (
-        <div className="container mx-auto my-32 flex flex-col items-center gap-4">
+        <div className="container mx-auto my-32 flex w-4/5 flex-col items-center gap-4 text-center">
             <h1 className="text-2xl font-bold">Check your Email</h1>
             <p>A sign in link has been sent to your email address.</p>
             <p className="mb-8 font-bold text-red-600">

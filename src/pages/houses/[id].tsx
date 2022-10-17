@@ -41,8 +41,8 @@ const HousePage: NextPage<HousePageProps> = ({ house, owner }) => {
     }
 
     return (
-        <main className="container mx-auto my-32 flex justify-center gap-10">
-            <section className="flex flex-col gap-10">
+        <main className="container mx-auto my-32 flex w-4/5 flex-col gap-10 text-sm sm:w-[550px] sm:text-base lg:w-max lg:flex-row">
+            <section className="flex  flex-col gap-10 ">
                 <Link href="/houses">
                     <button className={`${styles.btn}`}>Back to catalog</button>
                 </Link>
@@ -58,17 +58,18 @@ const HousePage: NextPage<HousePageProps> = ({ house, owner }) => {
             </section>
             <section className="flex min-h-full flex-col justify-center gap-2">
                 <span className="flex items-baseline">
-                    <h1 className="text-4xl font-bold">
+                    <h1 className="text-3xl font-bold sm:text-4xl">
                         {formatPrice(house.price)}
                     </h1>
                     <h3 className="ml-4 mr-1 font-bold">{house.area}</h3>
                     <p>sqft</p>
                 </span>
                 <p>{house.address}</p>
-                <span className="flex h-10 items-center gap-1 border-l-2 pl-4">
+                <span className="flex h-16 flex-col justify-center gap-1 border-l-2 pl-4">
                     <p>Contact agent:</p>
-                    <b>+1{owner.phone}</b>
-                    <p>- {owner.owner}</p>
+                    <b>
+                        +1{owner.phone} - {owner.owner}
+                    </b>
                 </span>
                 <button className={`${styles.btn} mt-10`} onClick={openForm}>
                     Request a tour
@@ -78,7 +79,7 @@ const HousePage: NextPage<HousePageProps> = ({ house, owner }) => {
             <section
                 ref={formRef}
                 onClick={closeForm}
-                className="absolute top-0 left-0 hidden min-h-screen min-w-full bg-[#000000bb] py-40"
+                className="fixed top-0 left-0 hidden min-h-full min-w-full bg-[#000000bb] py-40"
             >
                 <RequestForm createRequest={createRequest} />
             </section>
