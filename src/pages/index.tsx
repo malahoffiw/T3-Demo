@@ -14,14 +14,18 @@ const Home: NextPage = () => {
     return (
         <main className="container mx-auto my-32 flex flex-col items-center gap-12 sm:grid sm:w-[560px] sm:grid-cols-2">
             <Link href="/houses">
-                <section className={`h-52 w-64 ${styles.blockWhite}`}>
+                <section
+                    className={`h-52 w-64 ${styles.blockWhite} ${styles.transformScale}`}
+                >
                     <BsFillHouseFill className="h-10 w-10" />
                     Houses catalog
                 </section>
             </Link>
 
             {status === "loading" && (
-                <section className={`h-52 w-64 ${styles.blockWhite}`}>
+                <section
+                    className={`h-52 w-64 ${styles.blockWhite} ${styles.transformScale}`}
+                >
                     <div className={styles.loader}>
                         <AiOutlineLoading3Quarters
                             className={`${styles.loaderLine} text-neutral-900`}

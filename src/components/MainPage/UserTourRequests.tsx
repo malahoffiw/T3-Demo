@@ -3,6 +3,8 @@ import styles from "../../styles"
 import { UserTour } from "../../types"
 import { trpc } from "../../utils/trpc"
 
+// show only last one
+
 const UserTourRequests = () => {
     const [userTours, setUserTours] = useState<UserTour[]>([])
     const { data: tours } = trpc.tourRequests.getUserTourRequests.useQuery()
@@ -15,7 +17,7 @@ const UserTourRequests = () => {
 
     return (
         <section
-            className={`h-52 w-64 ${styles.blockWhite} col-span-2 sm:w-full`}
+            className={`h-52 w-64 ${styles.blockWhite} ${styles.transformScale} col-span-2 sm:w-full`}
         >
             <p>You requested {userTours.length} tours</p>
         </section>

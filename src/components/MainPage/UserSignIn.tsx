@@ -8,7 +8,7 @@ const UserSignIn = () => {
     return (
         <button
             onClick={() => signIn()}
-            className={`h-52 w-64 ${styles.blockWhite}`}
+            className={`h-52 w-64 ${styles.blockWhite} ${styles.transformScale}`}
         >
             <FaRegUser className="h-10 w-10" />
             <p>Sign in</p>

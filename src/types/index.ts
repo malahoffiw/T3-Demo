@@ -1,9 +1,14 @@
 export interface UserTour {
     id: string
-    createdAt: Date
+    createdAt: Date | string
     userPhone: string
-    scheduledFor: Date
+    scheduledFor: Date | string
     houseId: string
+}
+
+export interface UserTourSSR extends UserTour {
+    createdAt: string
+    scheduledFor: string
 }
 
 export interface House {
@@ -17,4 +22,10 @@ export interface House {
 export interface Owner {
     owner: string
     phone: string
+}
+
+export interface User {
+    name: string
+    email: string
+    image: string
 }
