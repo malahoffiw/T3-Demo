@@ -1,64 +1,66 @@
 import type { GetServerSideProps, NextPage } from "next"
 import Image from "next/image"
+import { signOut } from "next-auth/react"
 import { FaRegUser } from "react-icons/fa"
 import { prisma } from "../../server/db/client"
 import { getServerAuthSession } from "../../server/common/get-server-auth-session"
 import { House, User, UserTour, UserTourSSR } from "../../types"
 import styles from "../../styles"
-import Link from "next/link"
+import RequestElements from "../../components/MyPage/RequestElements"
+import CancelBtn from "../../components/MyPage/CancelBtn"
 
 const MyPage: NextPage<{
     user: User
     requests: UserTourSSR[]
     houses: House[]
 }> = ({ user, requests, houses }) => (
-    <main className="container mx-auto my-32 flex flex-col items-center gap-10">
-        <h1 className="text-3xl">My profile</h1>
-        <div className={`${styles.blockWhite} h-52 w-2/5`}>
-            {user.image ? (
-                <Image src={user.image} width={56} height={56} alt="user" />
-            ) : (
-                <FaRegUser className="h-14 w-14" />
-            )}
-            <p>
-                Email: <b>{user.email}</b>
-            </p>
-            <p>{user.name || "noname"}</p>
+    <main className="container mx-auto my-32 flex w-4/5 grid-cols-2 grid-rows-[100px_1fr] flex-col gap-10 text-center md:grid 2xl:grid-cols-3">
+        <div>
+            <h1 className="mb-8 text-3xl">My profile</h1>
+            <div className={`${styles.blockWhite} h-96 w-full`}>
+                {user.image ? (
+                    <Image
+                        className="rounded"
+                        src={user.image}
+                        width={128}
+                        height={128}
+                        alt="user"
+                    />
+                ) : (
+                    <FaRegUser className="h-32 w-32" />
+                )}
+                <b>{user.email}</b>
+                <p>{user.name || "noname"}</p>
+                <button
+                    className={`${styles.btnLogin} mt-3`}
+                    onClick={() => signOut()}
+                >
+                    Logout
+                </button>
+            </div>
         </div>
-        <div className={`${styles.blockWhite} h-fit w-2/5 py-10`}>
-            <p>You requested {requests.length} tour(s)</p>
-            <ul className="mt-6">{getRequestElements(requests, houses)}</ul>
+        <div className="2xl:col-span-2">
+            <h1 className="mb-8 text-3xl">My requests</h1>
+            <div className={`${styles.blockWhite} h-fit w-full py-10`}>
+                <p>
+                    You requested <b>{requests.length}</b> tour(s)
+                </p>
+                {requests.length > 1 && <CancelBtn />}
+                <RequestElements requests={requests} houses={houses} />
+            </div>
         </div>
     </main>
 )
 
-const getRequestElements = (requests: UserTourSSR[], houses: House[]) => {
-    return requests.map((el, i) => {
-        return (
-            <li className="flex items-center gap-7" key={el.id}>
-                <Link href={`/houses/${houses[i]?.id}`}>
-                    <Image
-                        src={`/images/${houses[i]?.photo as string}`}
-                        alt="house"
-                        width={150}
-                        height={100}
-                        className="cursor-pointer rounded object-cover"
-                    />
-                </Link>
-                <div className="text-center">
-                    <b>{el.scheduledFor.slice(4, -37)}</b>
-                    <p>at</p>
-                    <b>{houses[i]?.address}</b>
-                </div>
-                <button className={styles.btnLogin}>Cancel</button>
-            </li>
-        )
-    })
-}
-
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
     const session = await getServerAuthSession(ctx)
-    if (!session || !session.user) throw new Error("SESSION NOT FOUND")
+    if (!session || !session.user)
+        return {
+            redirect: {
+                destination: "/",
+                permanent: false,
+            },
+        }
 
     const user = await prisma.user.findUnique({
         where: {

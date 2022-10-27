@@ -1,9 +1,9 @@
 import { useRef } from "react"
 import type { GetStaticPropsContext, NextPage } from "next"
+import { useRouter } from "next/router"
+import Image from "next/image"
 import { ISODateString } from "next-auth"
 import { signIn, useSession } from "next-auth/react"
-import Link from "next/link"
-import Image from "next/image"
 import { trpc } from "../../utils/trpc"
 import { prisma } from "../../server/db/client"
 import formatPrice from "../../utils/formatPrice"
@@ -18,6 +18,7 @@ type HousePageProps = {
 }
 
 const HousePage: NextPage<HousePageProps> = ({ house, owner }) => {
+    const router = useRouter()
     const tourRequest = trpc.tourRequests.createTourRequest.useMutation()
     const createRequest = (userPhone: string, scheduledFor: ISODateString) => {
         tourRequest.mutate({
@@ -43,9 +44,12 @@ const HousePage: NextPage<HousePageProps> = ({ house, owner }) => {
     return (
         <main className="container mx-auto my-32 flex w-4/5 flex-col gap-10 text-sm sm:w-[550px] sm:text-base lg:w-max lg:flex-row">
             <section className="flex  flex-col gap-10 ">
-                <Link href="/houses">
-                    <button className={`${styles.btn}`}>Back to catalog</button>
-                </Link>
+                <button
+                    className={`${styles.btn}`}
+                    onClick={() => router.back()}
+                >
+                    Back
+                </button>
                 <Image
                     src={`/images/${house.photo}`}
                     alt="house"

@@ -2,6 +2,26 @@ import { z } from "zod"
 import { router, publicProcedure, protectedProcedure } from "../trpc"
 
 export const tourRequestsRouter = router({
+    deleteAllRequests: protectedProcedure.mutation(async ({ ctx }) => {
+        try {
+            await ctx.prisma.tourRequests.deleteMany()
+        } catch (error) {
+            console.log(error)
+        }
+    }),
+    deleteTourRequest: protectedProcedure
+        .input(z.string())
+        .mutation(async ({ ctx, input }) => {
+            try {
+                await ctx.prisma.tourRequests.delete({
+                    where: {
+                        id: input,
+                    },
+                })
+            } catch (error) {
+                console.log(error)
+            }
+        }),
     createTourRequest: protectedProcedure
         .input(
             z.object({

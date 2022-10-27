@@ -30,7 +30,10 @@ const UserAccount = ({ session }: UserAccountProps) => {
                 </p>
                 <button
                     className={`${styles.btnLogin}`}
-                    onClick={() => signOut()}
+                    onClick={(e) => {
+                        e.stopPropagation()
+                        signOut()
+                    }}
                 >
                     Logout
                 </button>
