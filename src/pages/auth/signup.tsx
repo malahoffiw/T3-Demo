@@ -6,7 +6,7 @@ import { trpc } from "../../utils/trpc"
 const Signup = () => {
     const btnRef = useRef<HTMLButtonElement>(null)
     const [name, setName] = useState<string>("")
-    const { push } = useRouter()
+    const { replace } = useRouter()
     const { mutate, status } = trpc.user.updateUserName.useMutation()
 
     useEffect(() => {
@@ -14,10 +14,10 @@ const Signup = () => {
             btnRef.current.disabled = true
         if (status === "success") {
             setName("")
-            push("/")
+            replace("/")
         }
         if (status === "error") throw new Error("MUTATION ERROR")
-    }, [push, status])
+    }, [replace, status])
 
     return (
         <div className="container mx-auto my-32 flex w-4/5 flex-col items-center gap-5 text-center">
