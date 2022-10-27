@@ -43,7 +43,7 @@ const HousePage: NextPage<HousePageProps> = ({ house, owner }) => {
 
     return (
         <main className="container mx-auto my-32 flex w-4/5 flex-col gap-10 text-sm sm:w-[550px] sm:text-base lg:w-max lg:flex-row">
-            <section className="flex  flex-col gap-10 ">
+            <section className="flex flex-col gap-10 ">
                 <button
                     className={`${styles.btn}`}
                     onClick={() => router.back()}

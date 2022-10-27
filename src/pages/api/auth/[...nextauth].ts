@@ -10,7 +10,7 @@ export const authOptions: NextAuthOptions = {
         // todo
         // signIn: "/auth/signin",
         verifyRequest: "/auth/verify",
-        // newUser: "/auth/signup",
+        newUser: "/auth/signup",
     },
     // Include user.id on session
     callbacks: {
