@@ -1,17 +1,18 @@
-import { ChangeEvent, useRef, useState } from "react"
+import { ChangeEvent, useEffect, useRef, useState } from "react"
 import { ISODateString } from "next-auth"
 import { useRouter } from "next/router"
 import styles from "../../styles"
 
 type RequestFormProps = {
     createRequest: (userPhone: string, scheduledFor: ISODateString) => void
+    mutationStatus: "error" | "idle" | "loading" | "success"
 }
 
-const RequestForm = ({ createRequest }: RequestFormProps) => {
+const RequestForm = ({ createRequest, mutationStatus }: RequestFormProps) => {
     const [phone, setPhone] = useState<string>("")
     const [scheduledFor, setScheduledFor] =
         useState<ISODateString>("2022-11-01T09:00")
-    const router = useRouter()
+    const { reload } = useRouter()
     const btnRef = useRef<HTMLButtonElement>(null)
 
     const handlePhoneInput = (e: ChangeEvent<HTMLInputElement>) => {
@@ -25,6 +26,17 @@ const RequestForm = ({ createRequest }: RequestFormProps) => {
         }
     }
 
+    useEffect(() => {
+        if (mutationStatus === "loading" && btnRef.current)
+            btnRef.current.disabled = true
+        if (mutationStatus === "success") {
+            setPhone("")
+            setScheduledFor("2022-11-01T09:00")
+            reload()
+        }
+        if (mutationStatus === "error") throw new Error("MUTATION ERROR")
+    }, [mutationStatus, reload])
+
     return (
         <div
             onClick={(e) => e.stopPropagation()}
@@ -37,11 +49,7 @@ const RequestForm = ({ createRequest }: RequestFormProps) => {
                 className="flex flex-col items-center gap-3"
                 onSubmit={(event) => {
                     event.preventDefault()
-                    btnRef.current && (btnRef.current.disabled = true)
                     createRequest(phone, scheduledFor)
-                    setPhone("")
-                    setScheduledFor("2022-11-01T09:00")
-                    router.reload()
                 }}
             >
                 <label htmlFor="phone">Your phone number</label>

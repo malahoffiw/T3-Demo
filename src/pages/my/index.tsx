@@ -14,7 +14,7 @@ const MyPage: NextPage<{
     requests: UserTourSSR[]
     houses: House[]
 }> = ({ user, requests, houses }) => (
-    <main className="container mx-auto my-32 flex w-4/5 grid-cols-2 grid-rows-[100px_1fr] flex-col gap-10 text-center md:grid 2xl:grid-cols-3">
+    <main className="container mx-auto my-32 flex w-4/5 grid-cols-2 flex-col gap-10 text-center md:grid 2xl:grid-cols-3">
         <div>
             <h1 className="mb-8 text-3xl">My profile</h1>
             <div className={`${styles.blockWhite} h-96 w-full`}>

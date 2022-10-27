@@ -19,9 +19,9 @@ type HousePageProps = {
 
 const HousePage: NextPage<HousePageProps> = ({ house, owner }) => {
     const router = useRouter()
-    const tourRequest = trpc.tourRequests.createTourRequest.useMutation()
+    const { mutate, status } = trpc.tourRequests.createTourRequest.useMutation()
     const createRequest = (userPhone: string, scheduledFor: ISODateString) => {
-        tourRequest.mutate({
+        mutate({
             userPhone,
             scheduledFor: new Date(scheduledFor),
             houseId: house.id,
@@ -85,7 +85,10 @@ const HousePage: NextPage<HousePageProps> = ({ house, owner }) => {
                 onClick={closeForm}
                 className="fixed top-0 left-0 hidden min-h-full min-w-full bg-[#000000bb] py-40"
             >
-                <RequestForm createRequest={createRequest} />
+                <RequestForm
+                    createRequest={createRequest}
+                    mutationStatus={status}
+                />
             </section>
         </main>
     )
