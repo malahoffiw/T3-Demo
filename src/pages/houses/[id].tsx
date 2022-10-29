@@ -95,7 +95,7 @@ const HousePage: NextPage<HousePageProps> = ({ house, owner }) => {
 }
 
 export const getStaticPaths = async () => {
-    const houses = await prisma.houses.findMany({ select: { id: true } })
+    const houses: { id: string }[] = await prisma.houses.findMany({ select: { id: true } })
 
     const paths = houses.map((house) => ({
         params: { id: house.id },
